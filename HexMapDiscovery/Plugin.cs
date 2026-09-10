@@ -12,7 +12,7 @@ namespace HexMapDiscovery
     {
         private const string PluginGuid = "com.hex.mapdiscovery";
         private const string PluginName = "HexMapDiscovery";
-        private const string PluginVersion = "1.0.0";
+        private const string PluginVersion = "1.0.1";
         private const float DefaultExplorationRadiusMultiplier = 3f;
 
         private Harmony _harmonyInstance;

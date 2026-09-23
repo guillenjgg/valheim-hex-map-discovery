@@ -16,21 +16,19 @@ namespace HexMapDiscovery
         private const float DefaultExplorationRadiusMultiplier = 3f;
 
         private Harmony _harmonyInstance;
-        private ConfigEntry<bool> _isModEnabled;
-        private ConfigEntry<float> _explorationRadiusMultiplier;
+
+        private static ConfigEntry<bool> IsModEnabled = null;
+        private static ConfigEntry<float> ExplorationRadiusMultiplier = null;
 
         internal static ManualLogSource Log;
-        internal static Plugin Instance;
-        internal static bool IsModEnabled => Instance != null && (Instance._isModEnabled?.Value ?? false);
-        internal static float ExplorationRadiusMultiplier => Instance != null ? (Instance._explorationRadiusMultiplier?.Value ?? 1f) : 1f;
 
         private void Awake()
         {
-            Instance = this;
             Log = Logger;
 
-            _isModEnabled = Config.Bind("General", "Enabled", true, "Enable or disable the mod.");
-            _explorationRadiusMultiplier = Config.Bind(
+            IsModEnabled = Config.Bind("General", "Enabled", true, "Enable or disable the mod.");
+
+            ExplorationRadiusMultiplier = Config.Bind(
                 "Exploration",
                 "ExplorationRadiusMultiplier",
                 DefaultExplorationRadiusMultiplier,
@@ -40,8 +38,9 @@ namespace HexMapDiscovery
                 )
             );
 
+            Assembly assembly = Assembly.GetExecutingAssembly();
             _harmonyInstance = new Harmony(PluginGuid);
-            _harmonyInstance.PatchAll();
+            _harmonyInstance.PatchAll(assembly);
 
             Log.LogInfo($"{PluginName} v{PluginVersion} loaded.");
         }
@@ -52,7 +51,6 @@ namespace HexMapDiscovery
 
             _harmonyInstance?.UnpatchSelf();
             _harmonyInstance = null;
-            Instance = null;
             Log = null;
         }
 
@@ -64,20 +62,20 @@ namespace HexMapDiscovery
 
             private static void Prefix(ref float radius)
             {
-                if(!Plugin.IsModEnabled || Player.m_localPlayer == null)
+                if (!IsModEnabled.Value || Player.m_localPlayer == null)
                 {
                     return;
                 }
 
-                var player = Player.m_localPlayer;
+                Player player = Player.m_localPlayer;
 
                 if (!IsAttachedToShip(player))
                 {
                     return;
                 }
 
-                // clamp the multiplier to safeguard against invalid config values
-                float multiplier = Mathf.Clamp(Plugin.ExplorationRadiusMultiplier, 1f, 10f);
+                // Clamp the multiplier to safeguard against invalid config values.
+                float multiplier = Mathf.Clamp(ExplorationRadiusMultiplier.Value, 1f, 10f);
                 radius *= multiplier;
             }
 
@@ -88,8 +86,8 @@ namespace HexMapDiscovery
                     return false;
                 }
 
-                var attached = (bool)AttachedField.GetValue(player);
-                var attachedToShip = (bool)AttachedToShipField.GetValue(player);
+                bool attached = (bool)AttachedField.GetValue(player);
+                bool attachedToShip = (bool)AttachedToShipField.GetValue(player);
 
                 return attached && attachedToShip;
             }

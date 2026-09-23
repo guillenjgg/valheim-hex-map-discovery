@@ -3,7 +3,7 @@
 ### v1.0.1
 
 ### Added
-- Valheim 1.0 update
+- Compiled with Valheim v1.0.14
 
 ### v1.0.0
 

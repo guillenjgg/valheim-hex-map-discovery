@@ -2,6 +2,8 @@
 
 Increases map exploration radius while actively piloting a ship in Valheim. Default multiplier is 3, but I prefer 5.
 
+Works with ValheimRAFT
+
 ## Features
 
 * Increases map exploration radius while steering a ship
@@ -18,26 +20,6 @@ Configuration file location:
 ```text
 BepInEx/config/com.hex.mapdiscovery.cfg
 ```
-
-Default configuration:
-
-```ini
-[General]
-
-## Enable or disable the mod
-# Setting type: Boolean
-# Default value: true
-Enabled = true
-
-[Exploration]
-
-## Multiplier for the exploration radius while piloting a ship
-# Setting type: Single
-# Default value: 3
-# Acceptable value range: From 1 to 10
-ExplorationRadiusMultiplier = 3
-```
-
 ---
 
 ## Installation
@@ -78,3 +60,17 @@ BepInEx/plugins/
 
 * Valheim
 * ValheimRAFT
+
+---
+
+## Support
+
+Discord support:
+
+https://discord.gg/wU2FXD94v4
+
+## Source
+
+GitHub:
+
+https://github.com/guillenjgg/valheim-hex-map-discovery
